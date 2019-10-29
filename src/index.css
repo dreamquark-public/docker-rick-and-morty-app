@@ -25,3 +25,7 @@ code {
     "Courier New",
     monospace;
 }
+
+@import './EpisodeCard/EpisodeCard.css';
+@import './Header/Header.css';
+@import './EpisodeList/EpisodeList.css';

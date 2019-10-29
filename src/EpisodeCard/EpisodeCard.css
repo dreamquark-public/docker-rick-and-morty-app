@@ -1,0 +1,40 @@
+.episode-card {
+  max-width: 500px;
+  max-height: 500px;
+  position: relative;
+  background-color: #fff;
+  border-radius: 10px;
+  text-align: center;
+  padding: 20px;
+  border: 5px solid;
+  border-image-source: linear-gradient(to right bottom, #87bc24, #6bae29, #4fa02e, #329130, #098232);
+  border-image-slice: 1;
+}
+
+.episode-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h4 {
+  color: #00aac6;
+}
+
+.episode-card__season-infos {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.episode-card__duration {
+  margin-bottom: 10px;
+}
+
+.episode-card__duration > span {
+  font-weight: 800;
+}
+
+.episode-card__season-infos span {
+  font-weight: 400;
+}
