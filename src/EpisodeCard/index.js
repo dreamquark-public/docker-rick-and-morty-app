@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import imagePlaceholder from './placeholder.png';
+
 function EpisodeCard(props) {
   const {
     name, number, duration, image, summary, season,
@@ -25,7 +27,7 @@ function EpisodeCard(props) {
           </div>
         </div>
       </div>
-      <img className="episode-card__img" src={image} alt={`Rick and Morty ${name}`} />
+      <img className="episode-card__img" src={image || imagePlaceholder} alt={`Rick and Morty ${name}`} />
       <div className="episode-card__duration">
         <span>Duration: </span>
         {duration}
@@ -36,27 +38,20 @@ function EpisodeCard(props) {
 }
 
 EpisodeCard.propTypes = {
-  name: PropTypes.string,
-  number: PropTypes.number,
-  duration: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  number: PropTypes.number.isRequired,
+  duration: PropTypes.string.isRequired,
   image: PropTypes.string,
   summary: PropTypes.string,
   season: PropTypes.shape({
     number: PropTypes.number,
     diffusionDate: PropTypes.string,
-  }),
+  }).isRequired,
 };
 
 EpisodeCard.defaultProps = {
-  name: 'Pilot',
-  number: 1,
-  duration: '22:30',
-  image: 'http://static.tvmaze.com/uploads/images/medium_landscape/15/37912.jpg',
-  summary: "<p>Rick takes Morty to another dimension to get some seeds for him but Morty's parents are considering to put Rick in a retirement home for keeping Morty away from school to help him in his lab.</p>",
-  season: {
-    number: 1,
-    diffusionDate: '2013',
-  },
+  image: undefined,
+  summary: '',
 };
 
 export default EpisodeCard;
