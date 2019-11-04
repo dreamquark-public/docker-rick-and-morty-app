@@ -4,23 +4,23 @@ import PropTypes from 'prop-types';
 import EpisodeList from '../EpisodeList';
 
 function EpisodeLibraryContainer(props) {
-  const { getEpisodesList, episodes } = props;
+  const { getEpisodesList, episodesLibrary } = props;
 
   useEffect(() => {
     getEpisodesList();
   }, [getEpisodesList]);
 
   return (
-    <>{ !episodes.isFetching && <EpisodeList episodes={episodes.data} />}</>
+    <>{ !episodesLibrary.isFetching && <EpisodeList episodes={episodesLibrary.episodes} />}</>
   );
 }
 
 EpisodeLibraryContainer.propTypes = {
   getEpisodesList: PropTypes.func.isRequired,
-  episodes: PropTypes.shape({
+  episodesLibrary: PropTypes.shape({
     isFetching: PropTypes.bool,
     error: PropTypes.object,
-    data: PropTypes.array,
+    episodes: PropTypes.array,
   }).isRequired,
 };
 

@@ -16,10 +16,18 @@ const errorEpisodeList = (errorJson) => ({ type: ERROR_EPISODES_LIST, error: err
 /* eslint-disable no-console */
 // async action
 export const fetchEpisodesList = (graphQlFields) => async (dispatch) => {
+  const formatedGraphQlQuery = `
+    query getEpisodeList($skip: Int!) {
+      episodesLibrary(skip: $skip) {
+        ${graphQlFields}
+      }
+    } 
+  `;
+
   dispatch(requestEpisodesList());
 
   try {
-    const episodes = await GraphQLFetcher('query', 'episodes', graphQlFields);
+    const episodes = await GraphQLFetcher(formatedGraphQlQuery, 'episodesLibrary', { skip: 0 });
     dispatch(receiveEpisodeList(episodes));
   } catch (err) {
     console.error(err);
@@ -39,7 +47,8 @@ const getEpisodesList = produce((draft = {}, action) => {
     case RECEIVE_EPISODES_LIST:
       draft.episodeLibrary = {
         isFetching: false,
-        data: action.data,
+        episodes: action.data.episodes,
+        totalCount: action.data.totalCount,
       };
       break;
     case ERROR_EPISODES_LIST:

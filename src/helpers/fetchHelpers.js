@@ -7,20 +7,15 @@ function generateApiRequestHeaders() {
   return headers;
 }
 
-const constructGraphQLQuery = (type, entityName, fieldToRetrieve) => `${type} {
-  ${entityName} {
-    ${fieldToRetrieve}
-  }
-}`;
-
 /* eslint-disable no-console */
-async function GraphQLFetcher(type, entityName, fieldToRetrieve) {
+async function GraphQLFetcher(formatedGraphQLQuery, entityName, queryParams) {
   const reqOptions = {
     method: 'POST',
     headers: generateApiRequestHeaders(),
     mode: 'cors',
     body: JSON.stringify({
-      query: constructGraphQLQuery(type, entityName, fieldToRetrieve),
+      query: formatedGraphQLQuery,
+      variables: queryParams,
     }),
   };
 

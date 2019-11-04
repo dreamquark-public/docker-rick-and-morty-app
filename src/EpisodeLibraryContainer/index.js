@@ -4,21 +4,24 @@ import { episodeListSelector, fetchEpisodesList } from './EpisodeLibraryRedux';
 import EpisodeLibraryContainer from './EpisodeLibraryContainer';
 
 const episodeListGraphQLFields = `
-  id
-  name
-  number
-  duration
-  image
-  summary
-  season {
+  totalCount
+  episodes {
+    id
+    name
     number
-    diffusionDate
+    duration
+    image
+    summary
+    season {
+      number
+      diffusionDate
+    }
   }
 `;
 
 function mapStateToProps(state) {
   return {
-    episodes: episodeListSelector(state),
+    episodesLibrary: episodeListSelector(state),
   };
 }
 
