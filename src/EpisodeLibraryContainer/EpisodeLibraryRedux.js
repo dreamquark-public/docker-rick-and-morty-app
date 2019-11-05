@@ -1,5 +1,6 @@
 import produce from 'immer';
-import GraphQLFetcher from '../helpers/fetchHelpers';
+import { get } from 'lodash/fp';
+import { GraphQLFetcher } from '../helpers/fetch-helpers';
 
 // actions types
 const REQUEST_EPISODES_LIST = 'REQUEST_EPISODES_LIST';
@@ -13,12 +14,12 @@ const receiveEpisodeList = (episodeListJson) => (
 );
 const errorEpisodeList = (errorJson) => ({ type: ERROR_EPISODES_LIST, error: errorJson });
 
-/* eslint-disable no-console */
+/* eslint-disable no-console,max-len */
 // async action
-export const fetchEpisodesList = (graphQlFields) => async (dispatch) => {
+export const fetchEpisodesList = (graphQlFields, graphQLParameters = { skip: 0 }) => async (dispatch) => {
   const formatedGraphQlQuery = `
-    query getEpisodeList($skip: Int!) {
-      episodesLibrary(skip: $skip) {
+    query getEpisodeList($skip: Int!, $limit: Int) {
+      episodesLibrary(skip: $skip, limit: $limit) {
         ${graphQlFields}
       }
     } 
@@ -27,7 +28,7 @@ export const fetchEpisodesList = (graphQlFields) => async (dispatch) => {
   dispatch(requestEpisodesList());
 
   try {
-    const episodes = await GraphQLFetcher(formatedGraphQlQuery, 'episodesLibrary', { skip: 0 });
+    const episodes = await GraphQLFetcher(formatedGraphQlQuery, 'episodesLibrary', graphQLParameters);
     dispatch(receiveEpisodeList(episodes));
   } catch (err) {
     console.error(err);
@@ -42,12 +43,13 @@ const getEpisodesList = produce((draft = {}, action) => {
     case REQUEST_EPISODES_LIST:
       draft.episodeLibrary = {
         isFetching: true,
+        episodes: get('episodeLibrary.episodes', draft),
       };
       break;
     case RECEIVE_EPISODES_LIST:
       draft.episodeLibrary = {
         isFetching: false,
-        episodes: action.data.episodes,
+        episodes: get('episodeLibrary.episodes', draft) ? Array.concat(get('episodeLibrary.episodes', draft), action.data.episodes) : action.data.episodes,
         totalCount: action.data.totalCount,
       };
       break;

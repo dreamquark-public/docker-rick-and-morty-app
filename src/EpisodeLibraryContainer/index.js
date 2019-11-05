@@ -27,7 +27,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getEpisodesList: () => dispatch(fetchEpisodesList(episodeListGraphQLFields)),
+    getEpisodesList: (episodeLibraryParameters) => dispatch(fetchEpisodesList(
+      episodeListGraphQLFields,
+      episodeLibraryParameters,
+    )),
   };
 }
 

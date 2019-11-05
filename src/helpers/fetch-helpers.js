@@ -8,7 +8,7 @@ function generateApiRequestHeaders() {
 }
 
 /* eslint-disable no-console */
-async function GraphQLFetcher(formatedGraphQLQuery, entityName, queryParams) {
+export async function GraphQLFetcher(formatedGraphQLQuery, entityName, queryParams) {
   const reqOptions = {
     method: 'POST',
     headers: generateApiRequestHeaders(),
