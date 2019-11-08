@@ -1,7 +1,8 @@
-import { connect } from 'react-redux';
 
 import { episodeListSelector, fetchEpisodesList } from './EpisodeLibraryRedux';
-import EpisodeLibraryContainer from './EpisodeLibraryContainer';
+
+import Library from '../Library';
+import EpisodeList from '../EpisodeList';
 
 const episodeListGraphQLFields = `
   totalCount
@@ -19,22 +20,8 @@ const episodeListGraphQLFields = `
   }
 `;
 
-function mapStateToProps(state) {
-  return {
-    episodesLibrary: episodeListSelector(state),
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    getEpisodesList: (episodeLibraryParameters) => dispatch(fetchEpisodesList(
-      episodeListGraphQLFields,
-      episodeLibraryParameters,
-    )),
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(EpisodeLibraryContainer);
+export default Library({
+  action: fetchEpisodesList,
+  selector: episodeListSelector,
+  graphQLFields: episodeListGraphQLFields,
+})(EpisodeList);
