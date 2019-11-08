@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { get } from 'lodash/fp';
 
 import { useQueryString } from '../hooks/query-string-hooks';
 import { updateQueryString } from '../helpers/url-helpers';
@@ -11,21 +12,28 @@ function Library({ action, selector, graphQLFields }) {
     function ConnectedLibrary(props) {
       const { libraryFetcher, library, history } = props;
 
-      const { skip = 0, limit = 8 } = useQueryString();
+      const { skip, limit } = useQueryString();
       if (!skip && !limit) {
         updateQueryString(history, { skip: 0, limit: 8 });
       }
 
       useEffect(() => {
-        libraryFetcher({ skip: +skip, limit: +limit });
+        if (!library.collection && skip && limit) {
+          libraryFetcher({ skip: 0, limit: +skip + +limit });
+        } else if (skip && limit) {
+          libraryFetcher({ skip: +skip, limit: +limit });
+        }
       }, [libraryFetcher, skip, limit]);
+
+      const haveAllCollection = library.totalCount === get('collection.length', library);
 
       return (
         <>
           { (!library.isFetching || !library.collection) && (
             <>
               <LibraryComponent collection={library.collection} />
-              <LibraryShowMore history={history} onFetch={libraryFetcher} />
+              { (!haveAllCollection)
+                && <LibraryShowMore history={history} onFetch={libraryFetcher} />}
             </>
           )}
         </>
@@ -52,6 +60,7 @@ function Library({ action, selector, graphQLFields }) {
         isFetching: PropTypes.bool,
         error: PropTypes.object,
         collection: PropTypes.array,
+        totalCount: PropTypes.number,
       }).isRequired,
       history: PropTypes.shape({
         replace: PropTypes.func.isRequired,

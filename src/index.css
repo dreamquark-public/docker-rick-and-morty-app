@@ -67,7 +67,7 @@ button,
 [type="reset"],
 [type="submit"] {
   -webkit-appearance: button;
-} 
+}
 
 @import './EpisodeCard/EpisodeCard.css';
 @import './Header/Header.css';
