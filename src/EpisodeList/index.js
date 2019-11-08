@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import EpisodeCard from '../EpisodeCard';
 
 function EpisodeList(props) {
-  const { episodes } = props;
+  const { collection } = props;
 
 
   return (
     <div className="episode-list">
       <>
-        {episodes.map((episode) => episode && (
+        {collection.map((episode) => episode && (
         <EpisodeCard
           key={episode.id}
           name={episode.name}
@@ -27,7 +27,7 @@ function EpisodeList(props) {
 }
 
 EpisodeList.propTypes = {
-  episodes: PropTypes.arrayOf(
+  collection: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
       number: PropTypes.number,
@@ -43,7 +43,7 @@ EpisodeList.propTypes = {
 };
 
 EpisodeList.defaultProps = {
-  episodes: [],
+  collection: [],
 };
 
 export default EpisodeList;

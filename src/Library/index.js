@@ -22,9 +22,9 @@ function Library({ action, selector, graphQLFields }) {
 
       return (
         <>
-          { !library.isFetching && (
+          { (!library.isFetching || !library.collection) && (
             <>
-              <LibraryComponent episodes={library.episodes} />
+              <LibraryComponent collection={library.collection} />
               <LibraryShowMore history={history} onFetch={libraryFetcher} />
             </>
           )}
@@ -51,7 +51,7 @@ function Library({ action, selector, graphQLFields }) {
       library: PropTypes.shape({
         isFetching: PropTypes.bool,
         error: PropTypes.object,
-        episodes: PropTypes.array,
+        collection: PropTypes.array,
       }).isRequired,
       history: PropTypes.shape({
         replace: PropTypes.func.isRequired,

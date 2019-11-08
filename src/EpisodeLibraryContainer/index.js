@@ -6,7 +6,7 @@ import EpisodeList from '../EpisodeList';
 
 const episodeListGraphQLFields = `
   totalCount
-  episodes {
+  collection {
     id
     name
     number

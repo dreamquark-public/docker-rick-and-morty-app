@@ -43,13 +43,13 @@ const getEpisodesList = produce((draft = {}, action) => {
     case REQUEST_EPISODES_LIST:
       draft.episodeLibrary = {
         isFetching: true,
-        episodes: get('episodeLibrary.episodes', draft),
+        collection: get('episodeLibrary.collection', draft),
       };
       break;
     case RECEIVE_EPISODES_LIST:
       draft.episodeLibrary = {
         isFetching: false,
-        episodes: get('episodeLibrary.episodes', draft) ? Array.concat(get('episodeLibrary.episodes', draft), action.data.episodes) : action.data.episodes,
+        collection: get('episodeLibrary.collection', draft) ? Array.concat(get('episodeLibrary.collection', draft), action.data.collection) : action.data.collection,
         totalCount: action.data.totalCount,
       };
       break;
