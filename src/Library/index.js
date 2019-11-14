@@ -7,69 +7,67 @@ import { useQueryString } from '../hooks/query-string-hooks';
 import { updateQueryString } from '../helpers/url-helpers';
 import LibraryShowMore from '../LibraryShowMore';
 
-function Library({ action, selector, graphQLFields }) {
-  return function LibraryHOC(LibraryComponent) {
-    function ConnectedLibrary(props) {
-      const { libraryFetcher, library, history } = props;
+const Library = ({ action, selector, graphQLFields }) => (LibraryComponent) => {
+  function ConnectedLibrary(props) {
+    const { libraryFetcher, library, history } = props;
 
-      const { skip, limit } = useQueryString();
-      if (!skip && !limit) {
-        updateQueryString(history, { skip: 0, limit: 8 });
+    const { skip, limit } = useQueryString();
+    if (!skip && !limit) {
+      updateQueryString(history, { skip: 0, limit: 8 });
+    }
+
+    useEffect(() => {
+      if (!library.collection && skip && limit) {
+        libraryFetcher({ skip: 0, limit: +skip + +limit });
+      } else if (skip && limit) {
+        libraryFetcher({ skip: +skip, limit: +limit });
       }
+    }, [libraryFetcher, skip, limit]);
 
-      useEffect(() => {
-        if (!library.collection && skip && limit) {
-          libraryFetcher({ skip: 0, limit: +skip + +limit });
-        } else if (skip && limit) {
-          libraryFetcher({ skip: +skip, limit: +limit });
-        }
-      }, [libraryFetcher, skip, limit]);
+    const haveAllCollection = library.totalCount === get('collection.length', library);
 
-      const haveAllCollection = library.totalCount === get('collection.length', library);
+    return (
+      <>
+        { (!library.isFetching || !library.collection) && (
+          <>
+            <LibraryComponent collection={library.collection} />
+            { (!haveAllCollection)
+              && <LibraryShowMore history={history} onFetch={libraryFetcher} />}
+          </>
+        )}
+      </>
+    );
+  }
 
-      return (
-        <>
-          { (!library.isFetching || !library.collection) && (
-            <>
-              <LibraryComponent collection={library.collection} />
-              { (!haveAllCollection)
-                && <LibraryShowMore history={history} onFetch={libraryFetcher} />}
-            </>
-          )}
-        </>
-      );
-    }
-
-    function mapStateToProps(state) {
-      return {
-        library: selector(state),
-      };
-    }
-
-    function mapDispatchToProps(dispatch) {
-      return {
-        libraryFetcher: (libraryParameters) => dispatch(
-          action(graphQLFields, libraryParameters),
-        ),
-      };
-    }
-
-    ConnectedLibrary.propTypes = {
-      libraryFetcher: PropTypes.func.isRequired,
-      library: PropTypes.shape({
-        isFetching: PropTypes.bool,
-        error: PropTypes.object,
-        collection: PropTypes.array,
-        totalCount: PropTypes.number,
-      }).isRequired,
-      history: PropTypes.shape({
-        replace: PropTypes.func.isRequired,
-      }).isRequired,
+  function mapStateToProps(state) {
+    return {
+      library: selector(state),
     };
+  }
 
-    return connect(mapStateToProps, mapDispatchToProps)(ConnectedLibrary);
+  function mapDispatchToProps(dispatch) {
+    return {
+      libraryFetcher: (libraryParameters) => dispatch(
+        action(graphQLFields, libraryParameters),
+      ),
+    };
+  }
+
+  ConnectedLibrary.propTypes = {
+    libraryFetcher: PropTypes.func.isRequired,
+    library: PropTypes.shape({
+      isFetching: PropTypes.bool,
+      error: PropTypes.object,
+      collection: PropTypes.array,
+      totalCount: PropTypes.number,
+    }).isRequired,
+    history: PropTypes.shape({
+      replace: PropTypes.func.isRequired,
+    }).isRequired,
   };
-}
+
+  return connect(mapStateToProps, mapDispatchToProps)(ConnectedLibrary);
+};
 
 
 export default Library;

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 import EpisodeCard from '../EpisodeCard';
 
-function EpisodeList(props) {
+const EpisodeList = memo((props) => {
   const { collection } = props;
 
 
@@ -24,7 +24,7 @@ function EpisodeList(props) {
       </>
     </div>
   );
-}
+});
 
 EpisodeList.propTypes = {
   collection: PropTypes.arrayOf(

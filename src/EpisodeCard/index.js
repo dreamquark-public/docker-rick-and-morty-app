@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 import imagePlaceholder from './placeholder.png';
 
-function EpisodeCard(props) {
+const EpisodeCard = memo((props) => {
   const {
     name, number, duration, image, summary, season,
   } = props;
@@ -35,7 +35,7 @@ function EpisodeCard(props) {
       <div>{summary}</div>
     </div>
   );
-}
+});
 
 EpisodeCard.propTypes = {
   name: PropTypes.string.isRequired,
