@@ -49,7 +49,7 @@ const getEpisodesList = produce((draft = {}, action) => {
     case RECEIVE_EPISODES_LIST:
       draft.episodeLibrary = {
         isFetching: false,
-        collection: get('episodeLibrary.collection', draft) ? Array.concat(get('episodeLibrary.collection', draft), action.data.collection) : action.data.collection,
+        collection: get('episodeLibrary.collection', draft) ? [].concat(get('episodeLibrary.collection', draft), action.data.collection) : action.data.collection,
         totalCount: action.data.totalCount,
       };
       break;
